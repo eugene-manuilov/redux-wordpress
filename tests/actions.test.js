@@ -1,4 +1,4 @@
-import createActions from '../src/actions';
+import { createActions } from '../src/index';
 
 test('Check actions created by createActions function', () => {
 	const actions = createActions('test-rest-api', 'http://wordpress.test/wp-json/', ['books', 'authors']);
