@@ -8,7 +8,7 @@
 		"url": "https://github.com/eugene-manuilov/redux-wordpress/issues"
 	},
 	"version": "1.0.0",
-	"main": "index.js",
+	"main": "lib/index",
 	"keywords": [
 		"redux",
 		"wordpress",
@@ -19,9 +19,11 @@
 		"url": "git+https://github.com/eugene-manuilov/redux-wordpress.git"
 	},
 	"scripts": {
-		"build": "webpack --progress",
-		"watch": "webpack --progress --watch",
-		"test": "echo \"Error: no test specified\" && exit 1"
+		"build": "npm run build:commonjs & npm run build:umd & npm run build:umd:min",
+		"build:commonjs": "mkdir -p lib && babel ./src -d lib",
+		"build:umd": "webpack dist/redux-wordpress.js",
+		"build:umd:min": "NODE_ENV=production webpack dist/redux-wordpress.min.js",
+		"prepublish": "npm run build"
 	},
 	"devDependencies": {
 		"babel-core": "^6.24.1",

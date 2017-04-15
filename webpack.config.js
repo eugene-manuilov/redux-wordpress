@@ -10,10 +10,8 @@ config.entry = './index.js';
 
 // output
 config.output = {
-	path: path.join(__dirname, 'dist'),
-	filename: "redux-wordpress.js",
 	library: "ReduxWordPress",
-    libraryTarget: 'umd'
+	libraryTarget: 'umd'
 };
 
 // define module and plugins
@@ -41,5 +39,10 @@ config.module.rules.push({
 
 // no emit plugin
 config.plugins.push(new webpack.NoEmitOnErrorsPlugin());
+
+// uglify plugin
+if ('production' === process.env.NODE_ENV) {
+	config.plugins.push(new webpack.optimize.UglifyJsPlugin({sourceMap: true}));
+}
 
 module.exports = config;
