@@ -1,12 +1,12 @@
 import reducer from './reducer';
-import * as actions from './actions';
+import actions from './actions';
 
 const ReduxWordPress = {
 	createReducer: reducer,
 	reducer: reducer(),
-	actions: actions
+	createActions: actions
 };
 
 export default ReduxWordPress;
 export { reducer as createReducer };
-export { actions as actions };
+export { actions as createActions };
