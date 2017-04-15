@@ -1,6 +1,5 @@
 {
 	"name": "redux-wordpress",
-	"version": "1.0.0",
 	"description": "Redux actions and reducer to work with WordPress REST API",
 	"license": "MIT",
 	"author": "Eugene Manuilov",
@@ -8,17 +7,25 @@
 	"bugs": {
 		"url": "https://github.com/eugene-manuilov/redux-wordpress/issues"
 	},
-	"repository": {
-		"type": "git",
-		"url": "git+https://github.com/eugene-manuilov/redux-wordpress.git"
-	},
+	"version": "1.0.0",
+	"main": "index.js",
 	"keywords": [
 		"redux",
 		"wordpress",
 		"wordpress-rest-api"
 	],
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/eugene-manuilov/redux-wordpress.git"
+	},
 	"scripts": {
+		"build": "webpack --progress",
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},
-	"main": "index.js"
+	"devDependencies": {
+		"babel-core": "^6.24.1",
+		"babel-loader": "^6.4.1",
+		"babel-preset-env": "^1.4.0",
+		"webpack": "^2.4.1"
+	}
 }
