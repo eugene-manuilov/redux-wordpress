@@ -73,7 +73,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 0);
+/******/ 	return __webpack_require__(__webpack_require__.s = 2);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -84,11 +84,70 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+	value: true
 });
-var ReduxWordPress = {};
+exports.fetch = fetch;
+function fetch() {
+	return function (dispatch) {
+		dispatch({
+			type: '@@wordpress/fetch'
+		});
+	};
+}
+
+/***/ }),
+/* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+exports.default = createReducer;
+function createReducer() {
+	return function () {
+		var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+		var action = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
+		return state;
+	};
+}
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+exports.actions = exports.createReducer = undefined;
+
+var _reducer = __webpack_require__(1);
+
+var _reducer2 = _interopRequireDefault(_reducer);
+
+var _actions = __webpack_require__(0);
+
+var actions = _interopRequireWildcard(_actions);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var ReduxWordPress = {
+	createReducer: _reducer2.default,
+	reducer: (0, _reducer2.default)(),
+	actions: actions
+};
 
 exports.default = ReduxWordPress;
+exports.createReducer = _reducer2.default;
+exports.actions = actions;
 
 /***/ })
 /******/ ]);
