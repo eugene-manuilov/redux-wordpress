@@ -16,7 +16,7 @@
 	],
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/eugene-manuilov/redux-wordpress.git"
+		"url": "git@github.com:eugene-manuilov/redux-wordpress.git"
 	},
 	"scripts": {
 		"build": "npm run build:commonjs & npm run build:umd & npm run build:umd:min",
@@ -31,5 +31,9 @@
 		"babel-loader": "^6.4.1",
 		"babel-preset-env": "^1.4.0",
 		"webpack": "^2.4.1"
+	},
+	"dependencies": {
+		"isomorphic-fetch": "^2.2.1",
+		"lodash": "^4.17.4"
 	}
 }

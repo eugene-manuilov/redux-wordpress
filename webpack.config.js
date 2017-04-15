@@ -27,11 +27,7 @@ config.module.rules.push({
 		options: {
 			cacheDirectory: true,
 			presets: [
-				['env', {
-					targets: {
-						browsers: ["last 2 versions", "safari >= 7"]
-					}
-				}]
+				['env', {targets: {browsers: ["last 2 versions", "safari >= 7"]}}]
 			]
 		}
 	}
