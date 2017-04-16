@@ -9,6 +9,13 @@
 	},
 	"version": "0.1.0-dev.1",
 	"main": "lib/index",
+	"files": [
+		"*.md",
+		"dist",
+		"LICENSE",
+		"lib",
+		"src"
+	],
 	"keywords": [
 		"redux",
 		"wordpress",
