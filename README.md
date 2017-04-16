@@ -11,13 +11,16 @@ The main idea behind this package is to create helper functions which will allow
 
 import { createActions } from 'redux-wordpress';
 
-export default createActions('my-api', 'http://mysite.test/wp-json/', ['books', 'authors']);
+const actions = createActions('my-api', 'http://mysite.test/wp-json/', ['books', 'authors']);
+export default actions;
 
 // will export:
 //
 // {
 //     fetchBooks(params) { ... },
-//     fetchAuthors(params) { ... }
+//     fetchBooksById(id, params) { ... },
+//     fetchAuthors(params) { ... },
+//     fetchAuthorsById(id, params) { ... }
 // }
 ```
 

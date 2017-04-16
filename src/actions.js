@@ -16,10 +16,33 @@ export default function createActions(name, host, endpoints, namespace = 'wp/v2'
 						if (response.ok) {
 							response.json().then(data => {
 								dispatch({
-									type: `@@wordpress/${name}/fetch/${endpoint}`,
+									type: `@@wp/${name}/fetch/${endpoint}`,
 									totalPages: parseInt(response.headers.get('X-WP-TotalPages')),
 									total: parseInt(response.headers.get('X-WP-Total')),
 									results: data
+								});
+							}).catch(e => {
+								// @todo: catch json parsing error
+							});
+						} else {
+							// @todo: catch non-OK requests
+						}
+					}).catch(e => {
+						// @todo: catch failed requests
+					});
+			};
+		};
+
+		actions[`fetch${upperFirst(endpoint)}ById`] = (id, params = {}) => {
+			return dispatch => {
+				fetch(`${trimEnd(host, '/')}/${namespace}/${endpoint}/${id}?${qs(params)}`)
+					.then(response => {
+						if (response.ok) {
+							response.json().then(data => {
+								dispatch({
+									type: `@@wp/${name}/fetch-by-id/${endpoint}`,
+									result: data,
+									id
 								});
 							}).catch(e => {
 								// @todo: catch json parsing error

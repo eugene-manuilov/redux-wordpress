@@ -7,7 +7,9 @@ test('Check actions created by createActions function', () => {
 	const actions = createActions('test-rest-api', 'http://wordpress.test/wp-json/', ['books', 'authors']);
 
 	expect(typeof actions.fetchBooks).toBe('function');
+	expect(typeof actions.fetchBooksById).toBe('function');
 	expect(typeof actions.fetchAuthors).toBe('function');
+	expect(typeof actions.fetchAuthorsById).toBe('function');
 });
 
 test('Check generated fetch function', () => {
@@ -45,7 +47,7 @@ test('Check generated fetch function', () => {
 	const dispatch = action => {
 		expect(require('isomorphic-fetch').__getRequestedUrl()).toBe(`http://wordpress.test/wp-json/wp/v2/${endpoint}?context=view`);
 
-		expect(action.type).toBe(`@@wordpress/${name}/fetch/${endpoint}`);
+		expect(action.type).toBe(`@@wp/${name}/fetch/${endpoint}`);
 		expect(action.total).toBe(items.length);
 		expect(action.totalPages).toBe(1);
 
