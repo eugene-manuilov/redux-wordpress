@@ -3,8 +3,8 @@ export default function createReducer(name) {
 		const obj = {};
 		let match = null;
 
-		match = action.type.match(new RegExp(`^@@wp\/${name}\/fetch\/(\w+)$`));
-		if (match) {
+		match = action.type.match(new RegExp(`^@@wp\/${name}\/fetched\/(\w+)$`));
+		if (match && action.ok) {
 			obj[match[1]] = {
 				data: action.results,
 				total: action.total,
@@ -14,8 +14,8 @@ export default function createReducer(name) {
 			return Object.assign({}, state, obj)
 		}
 
-		match = action.type.match(new RegExp(`^@@wp\/${name}\/fetch-by-id\/(\w+)$`));
-		if (match) {
+		match = action.type.match(new RegExp(`^@@wp\/${name}\/fetched-by-id\/(\w+)$`));
+		if (match && action.ok) {
 			obj[match[1]] = state[match[1]] || {};
 			obj[match[1]][action.id] = action.result;
 
