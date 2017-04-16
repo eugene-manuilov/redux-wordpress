@@ -1,5 +1,6 @@
 import fetch from 'isomorphic-fetch';
-import { trimEnd, upperFirst } from 'lodash';
+import trimEnd from 'lodash/trimEnd';
+import upperFirst from 'lodash/upperFirst';
 
 const qs = params => Object.keys(params).map(key => `${encodeURIComponent(key)}=${encodeURIComponent(params[key])}`).join('&');
 
