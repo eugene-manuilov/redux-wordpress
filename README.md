@@ -43,12 +43,12 @@ Generated reducer will listen to action types dispatched from actions and update
     "books": {
         "total": 999,
         "totalPages": 999,
-        "results": [{}, {}, {}]
+        "data": [{}, {}, {}]
     },
     "authors": {
         "total": 999,
         "totalPages": 999,
-        "results": [{}, {}, {}]
+        "data": [{}, {}, {}]
     }
 }
 ```
