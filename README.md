@@ -40,19 +40,19 @@ Generated reducer will listen to action types dispatched from actions and update
     "books": {
         "total": 999,
         "totalPages": 999,
-        "data": []
+        "results": [{}, {}, {}]
     },
     "authors": {
         "total": 999,
         "totalPages": 999,
-        "data": []
+        "results": [{}, {}, {}]
     }
 }
 ```
 
 ## Contribute
 
-What to help or have a suggestion? Open a [new ticket](https://github.com/eugene-manuilov/redux-wordpress/issues/new) and we can discuss it or submit pull request.
+What to help or have a suggestion? Open a [new ticket](https://github.com/eugene-manuilov/redux-wordpress/issues/new) and we can discuss it or submit pull request. Please, make sure you run `npm run test` before submitting a pull request.
 
 ## LICENSE
 

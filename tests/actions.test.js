@@ -1,5 +1,6 @@
 jest.mock('isomorphic-fetch');
 
+import faker from 'faker';
 import { createActions } from '../lib/index';
 
 test('Check actions created by createActions function', () => {
@@ -11,45 +12,51 @@ test('Check actions created by createActions function', () => {
 
 test('Check generated fetch function', () => {
 	const name = 'test-rest-api';
-	const booksEndpoint = 'books';
-	const booksItems = [
-		{
-			"id": 338598,
+	const endpoint = 'books';
+	const items = [];
+
+	for (let i = 0, len = faker.random.number({min: 1, max: 20}); i < len; i++) {
+		items.push({
+			"id": faker.random.number(),
 			"date": "2017-04-13T20:02:35",
 			"date_gmt": "2017-04-13T20:02:35",
-			"guid": {"rendered": "http://wordpress.test/338598/"},
+			"guid": {"rendered": faker.internet.url()},
 			"modified": "2017-04-13T20:02:35",
 			"modified_gmt": "2017-04-13T20:02:35",
-			"slug": "test-book-slug",
+			"slug": faker.lorem.slug(),
 			"status": "publish",
 			"type": "post",
-			"link": "http://wordpress.test/test-book-slug/",
-			"title": {"rendered": "Test book"},
-			"content": {"rendered": ""},
-			"excerpt": {"rendered": ""},
-			"author": 1214,
-			"featured_media": 331190,
+			"link": `http://wordpress.test/${faker.lorem.slug()}/`,
+			"title": {"rendered": faker.lorem.sentence()},
+			"content": {"rendered": faker.lorem.paragraphs(4)},
+			"excerpt": {"rendered": faker.lorem.paragraph()},
+			"author": faker.random.number(),
+			"featured_media": faker.random.number(),
 			"comment_status": "open",
 			"ping_status": "open",
 			"sticky": false,
 			"template": "",
 			"format": "standard",
 			"meta": [],
-			"categories": [50]
-		}
-	];
+			"categories": [faker.random.number()]
+		});
+	}
 
 	const dispatch = action => {
-		expect(action.type).toBe(`@@wordpress/${name}/fetch/${booksEndpoint}`);
-		expect(action.total).toBe(booksItems.length);
+		expect(require('isomorphic-fetch').__getRequestedUrl()).toBe(`http://wordpress.test/wp-json/wp/v2/${endpoint}?context=view`);
+
+		expect(action.type).toBe(`@@wordpress/${name}/fetch/${endpoint}`);
+		expect(action.total).toBe(items.length);
 		expect(action.totalPages).toBe(1);
+
 		expect(Array.isArray(action.results)).toBeTruthy();
-		expect(action.results[0]).toEqual(booksItems[0]);
-		expect(require('isomorphic-fetch').__getRequestedUrl()).toBe('http://wordpress.test/wp-json/wp/v2/books?context=view');
+		items.forEach((item, i) => {
+			expect(action.results[i]).toEqual(item);
+		});
 	};
 
-	const actions = createActions(name, 'http://wordpress.test/wp-json/', [booksEndpoint, 'authors']);
-	
-	require('isomorphic-fetch').__setMockData(booksItems, booksItems.length, 1);
+	const actions = createActions(name, 'http://wordpress.test/wp-json/', [endpoint]);
+
+	require('isomorphic-fetch').__setMockData(items, items.length, 1);
 	actions.fetchBooks({context: 'view'})(dispatch);
 });
