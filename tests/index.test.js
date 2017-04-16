@@ -1,5 +1,5 @@
-import ReduxWordPress from '../src/index';
-import * as reduxwp from '../src/index';
+import ReduxWordPress from '../lib/index';
+import * as reduxwp from '../lib/index';
 
 test('Check default export', () => {
 	expect(typeof ReduxWordPress.reducer).toBe('function');
