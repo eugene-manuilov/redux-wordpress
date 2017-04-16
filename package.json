@@ -2,7 +2,7 @@
 	"name": "redux-wordpress",
 	"description": "Redux actions and reducer to work with WordPress REST API",
 	"license": "MIT",
-	"author": "Eugene Manuilov",
+	"author": "Eugene Manuilov <eugene.manuilov@gmail.com>",
 	"homepage": "https://github.com/eugene-manuilov/redux-wordpress#readme",
 	"bugs": {
 		"url": "https://github.com/eugene-manuilov/redux-wordpress/issues"
