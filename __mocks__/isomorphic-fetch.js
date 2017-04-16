@@ -1,10 +1,10 @@
 jest.genMockFromModule('isomorphic-fetch');
 
 let mockData = {};
-let requestedUrl = null;
+let requestedUrls = {};
 
 const fetch = (url) => {
-	requestedUrl = url;
+	requestedUrls[JSON.stringify(mockData)] = url;
 
 	return new Promise((resolve, reject) => {
 		const params = Object.assign({}, mockData);
@@ -36,6 +36,6 @@ fetch.__setMockData = (data) => {
 	mockData = Object.assign({}, data);
 };
 
-fetch.__getRequestedUrl = () => requestedUrl;
+fetch.__getRequestedUrl = (data) => requestedUrls[JSON.stringify(data)];
 
 module.exports = fetch;

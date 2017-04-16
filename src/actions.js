@@ -35,7 +35,8 @@ export default function createActions(name, host, endpoints, namespace = 'wp/v2'
 							ok: true,
 							totalPages: parseInt(response.headers.get('X-WP-TotalPages')),
 							total: parseInt(response.headers.get('X-WP-Total')),
-							results: json
+							results: json,
+							params
 						});
 					},
 
@@ -43,7 +44,8 @@ export default function createActions(name, host, endpoints, namespace = 'wp/v2'
 						dispatch({
 							type: `@@wp/${name}/fetched/${endpoint}`,
 							ok: false,
-							message: error
+							message: error,
+							params
 						});
 					}
 				);
@@ -66,7 +68,8 @@ export default function createActions(name, host, endpoints, namespace = 'wp/v2'
 							type: `@@wp/${name}/fetched-by-id/${endpoint}`,
 							ok: true,
 							result: json,
-							id
+							id,
+							params
 						});
 					},
 
@@ -74,7 +77,9 @@ export default function createActions(name, host, endpoints, namespace = 'wp/v2'
 						dispatch({
 							type: `@@wp/${name}/fetched-by-id/${endpoint}`,
 							ok: false,
-							message: error
+							message: error,
+							id,
+							params
 						});
 					}
 				);

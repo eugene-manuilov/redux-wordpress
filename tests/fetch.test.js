@@ -36,10 +36,19 @@ test('Test fetch function on success', () => {
 		});
 	}
 
+	const mockData = {
+		status: 200,
+		data: items,
+		total: items.length,
+		totalPages: 1
+	};
+
+	require('isomorphic-fetch').__setMockData(mockData);
+
 	let called = 0;
 	const dispatch = action => {
 		if (called++) {
-			expect(require('isomorphic-fetch').__getRequestedUrl()).toBe(`http://wordpress.test/wp-json/wp/v2/${endpoint}?context=view`);
+			expect(require('isomorphic-fetch').__getRequestedUrl(mockData)).toBe(`http://wordpress.test/wp-json/wp/v2/${endpoint}?context=view`);
 
 			expect(action.type).toBe(`@@wp/${name}/fetched/${endpoint}`);
 			expect(action.total).toBe(items.length);
@@ -52,16 +61,10 @@ test('Test fetch function on success', () => {
 			});
 		} else {
 			expect(action.type).toBe(`@@wp/${name}/fetching/${endpoint}`);
-			expect(action.params).toEqual(params);
 		}
-	};
 
-	require('isomorphic-fetch').__setMockData({
-		status: 200,
-		data: items,
-		total: items.length,
-		totalPages: 1
-	});
+		expect(action.params).toEqual(params);
+	};
 
 	const actions = createActions(name, 'http://wordpress.test/wp-json/', [endpoint]);
 	actions.fetchBooks(params)(dispatch);
@@ -73,11 +76,20 @@ test('Test fetch function on 404 response', () => {
 	const items = [];
 	const params = {context: 'view'};
 	const statusText = 'not-found';
+	const mockData = {
+		status: 404,
+		statusText: statusText,
+		data: items,
+		total: items.length,
+		totalPages: 1
+	};
+
+	require('isomorphic-fetch').__setMockData(mockData);
 
 	let called = 0;
 	const dispatch = action => {
 		if (called++) {
-			expect(require('isomorphic-fetch').__getRequestedUrl()).toBe(`http://wordpress.test/wp-json/wp/v2/${endpoint}?context=view`);
+			expect(require('isomorphic-fetch').__getRequestedUrl(mockData)).toBe(`http://wordpress.test/wp-json/wp/v2/${endpoint}?context=view`);
 
 			expect(action.type).toBe(`@@wp/${name}/fetched/${endpoint}`);
 			expect(action.total).toBeUndefined();
@@ -87,17 +99,10 @@ test('Test fetch function on 404 response', () => {
 			expect(action.message).toBe(statusText);
 		} else {
 			expect(action.type).toBe(`@@wp/${name}/fetching/${endpoint}`);
-			expect(action.params).toEqual(params);
 		}
-	};
 
-	require('isomorphic-fetch').__setMockData({
-		status: 404,
-		statusText: statusText,
-		data: items,
-		total: items.length,
-		totalPages: 1
-	});
+		expect(action.params).toEqual(params);
+	};
 
 	const actions = createActions(name, 'http://wordpress.test/wp-json/', [endpoint]);
 	actions.fetchBooks(params)(dispatch);
@@ -108,11 +113,17 @@ test('Test fetch function on reject response', () => {
 	const endpoint = 'books';
 	const params = {context: 'view'};
 	const statusText = '404 not found';
+	const mockData = {
+		reject: true,
+		statusText: statusText
+	};
+
+	require('isomorphic-fetch').__setMockData(mockData);
 
 	let called = 0;
 	const dispatch = action => {
 		if (called++) {
-			expect(require('isomorphic-fetch').__getRequestedUrl()).toBe(`http://wordpress.test/wp-json/wp/v2/${endpoint}?context=view`);
+			expect(require('isomorphic-fetch').__getRequestedUrl(mockData)).toBe(`http://wordpress.test/wp-json/wp/v2/${endpoint}?context=view`);
 
 			expect(action.type).toBe(`@@wp/${name}/fetched/${endpoint}`);
 			expect(action.total).toBeUndefined();
@@ -122,14 +133,10 @@ test('Test fetch function on reject response', () => {
 			expect(action.message).toBe(statusText);
 		} else {
 			expect(action.type).toBe(`@@wp/${name}/fetching/${endpoint}`);
-			expect(action.params).toEqual(params);
 		}
-	};
 
-	require('isomorphic-fetch').__setMockData({
-		reject: true,
-		statusText: statusText
-	});
+		expect(action.params).toEqual(params);
+	};
 
 	const actions = createActions(name, 'http://wordpress.test/wp-json/', [endpoint]);
 	actions.fetchBooks(params)(dispatch);
