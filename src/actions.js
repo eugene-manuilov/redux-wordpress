@@ -4,15 +4,15 @@ import upperFirst from 'lodash/upperFirst';
 
 const qs = params => Object.keys(params).map(key => `${encodeURIComponent(key)}=${encodeURIComponent(params[key])}`).join('&');
 
-const fetchApi = (url, success, error) => {
-	fetch(url).then(response => {
+const fetchApi = (url, success, error) => fetch(url)
+	.then(response => {
 		if (response.ok) {
 			response.json().then(data => success(data, response)).catch(error);
 		} else {
-			error();
+			error(response.statusText);
 		}
-	}).catch(error);
-};
+	})
+	.catch(error);
 
 export default function createActions(name, host, endpoints, namespace = 'wp/v2') {
 	const actions = {};
@@ -39,8 +39,12 @@ export default function createActions(name, host, endpoints, namespace = 'wp/v2'
 						});
 					},
 
-					() => {
-						// @todo: catch json parsing error
+					(error) => {
+						dispatch({
+							type: `@@wp/${name}/fetched/${endpoint}`,
+							ok: false,
+							message: error
+						});
 					}
 				);
 			};
@@ -66,8 +70,12 @@ export default function createActions(name, host, endpoints, namespace = 'wp/v2'
 						});
 					},
 
-					()=> {
-						// @todo: catch json parsing error
+					(error)=> {
+						dispatch({
+							type: `@@wp/${name}/fetched-by-id/${endpoint}`,
+							ok: false,
+							message: error
+						});
 					}
 				);
 			};
