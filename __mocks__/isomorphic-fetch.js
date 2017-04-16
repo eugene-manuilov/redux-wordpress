@@ -7,25 +7,33 @@ const fetch = (url) => {
 	requestedUrl = url;
 
 	return new Promise((resolve, reject) => {
-		// create a new response object with mock data
-		const response = new Response(JSON.stringify(mockData.data || null), {
-			status: 200,
-			headers: new Headers({
-				'X-WP-TotalPages': mockData.totalPages,
-				'X-WP-Total': mockData.total
-			})
-		});
+		const params = Object.assign({}, mockData);
 
 		// reset mock data
 		mockData = {};
 
-		// resolve promise to simulate successfull request
-		resolve(response);
+		if (params.reject) {
+			// reject with status text
+			reject(params.statusText || '');
+		} else {
+			// create a new response object with mock data
+			const response = new Response(JSON.stringify(params.data || null), {
+				status: params.status || 200,
+				statusText: params.statusText || '',
+				headers: new Headers({
+					'X-WP-TotalPages': params.totalPages,
+					'X-WP-Total': params.total
+				})
+			});
+
+			// resolve promise to simulate successfull request
+			resolve(response);
+		}
 	});
 };
 
-fetch.__setMockData = (data, total, totalPages) => {
-	mockData = {data, total, totalPages};
+fetch.__setMockData = (data) => {
+	mockData = Object.assign({}, data);
 };
 
 fetch.__getRequestedUrl = () => requestedUrl;
