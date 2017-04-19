@@ -7,7 +7,7 @@
 	"bugs": {
 		"url": "https://github.com/eugene-manuilov/redux-wordpress/issues"
 	},
-	"version": "0.1.0-dev.3",
+	"version": "0.1.0-dev.4",
 	"main": "lib/index",
 	"files": [
 		"*.md",
@@ -47,5 +47,9 @@
 	"dependencies": {
 		"isomorphic-fetch": "^2.2.1",
 		"lodash": "^4.17.4"
+	},
+	"peerDependencies": {
+		"redux": "^2.0.0 || ^3.0.0",
+		"redux-thunk": "^2.2.0"
 	}
 }
