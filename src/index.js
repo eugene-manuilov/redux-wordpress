@@ -3,7 +3,7 @@ import actions from './actions';
 
 const ReduxWordPress = {
 	createReducer: reducer,
-	createActions: actions
+	createActions: actions,
 };
 
 export default ReduxWordPress;

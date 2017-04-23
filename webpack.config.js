@@ -18,6 +18,22 @@ config.output = {
 config.module = {rules: []};
 config.plugins = [];
 
+// eslint configuration
+config.module.rules.push({
+    test: /\.js$/,
+    enforce: 'pre',
+    exclude: /node_modules/,
+    use: [
+        {
+            loader: 'eslint-loader',
+            options: {
+                failOnWarning: false,
+                failOnError: true
+            }
+        }
+    ]
+});
+
 // babel loader rule
 config.module.rules.push({
 	test: /\.js$/,
