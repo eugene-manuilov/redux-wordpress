@@ -17,7 +17,7 @@ const fetchApi = (url, success, error) => fetch(url)
 export default function createActions(name, host, endpoints, namespace = 'wp/v2') {
 	const actions = {};
 
-	for (const endpoint of endpoints) {
+	endpoints.forEach(endpoint => {
 
 		actions[`fetch${upperFirst(endpoint)}`] = (params = {}) => {
 			return dispatch => {
@@ -86,7 +86,17 @@ export default function createActions(name, host, endpoints, namespace = 'wp/v2'
 			};
 		};
 
-	}
+	});
 
 	return actions;
+}
+
+export function createRequests(name, host, endpoints, namespace = 'wp/v2') {
+	const requests = {};
+
+	endpoints.forEach(endpoint => {
+
+	});
+
+	return requests;
 }
