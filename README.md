@@ -70,8 +70,8 @@ export function fetchInitialData() {
     return dispatch => {
         return Promise
             .all([
-                requestBooks(...).then(response => response.json()).then(data => dispatch({action: 'books', data})),
-                requestAuthors(...).then(response => response.json()).then(data => dispatch({action: 'authors', data}))
+                requestBooks(...).then((data, response) => dispatch({action: 'books', data})),
+                requestAuthors(...).then((data, response) => dispatch({action: 'authors', data}))
             ])
             .then(() => dispatch({action: 'loaded-initial-data'}));
     };
