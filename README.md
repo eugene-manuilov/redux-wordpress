@@ -20,11 +20,15 @@ export default actions;
 //
 // {
 //     fetchBooks(params) { ... },
+//     fetchBooksEndpoint(endpoint, params) { ... },
 //     fetchAllBooks(params) { ... },
 //     fetchBooksById(id, params) { ... },
+//     fetchBooksEndpointById(id, endpoint, params) { ... },
 //     fetchAuthors(params) { ... },
+//     fetchAuthorsEndpoint(endpoint, params) { ... },
 //     fetchAllAuthors(params) { ... },
-//     fetchAuthorsById(id, params) { ... }
+//     fetchAuthorsById(id, params) { ... },
+//     fetchAuthorsEndpointById(id, endpoint, params) { ... }
 // }
 ```
 
