@@ -4,6 +4,10 @@ export default function createReducer(name) {
 		let match = null;
 
 		match = action.type.match(new RegExp(`^@@wp/${name}/fetched/(\\w+)$`));
+		if (!match) {
+			match = action.type.match(new RegExp(`^@@wp/${name}/fetched-all/(\\w+)$`));
+		}
+
 		if (match && action.ok) {
 			obj[match[1]] = Object.assign({}, state[match[1]] || {}, {
 				data: action.results,

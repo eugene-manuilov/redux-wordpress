@@ -20,8 +20,10 @@ export default actions;
 //
 // {
 //     fetchBooks(params) { ... },
+//     fetchAllBooks(params) { ... },
 //     fetchBooksById(id, params) { ... },
 //     fetchAuthors(params) { ... },
+//     fetchAllAuthors(params) { ... },
 //     fetchAuthorsById(id, params) { ... }
 // }
 ```
