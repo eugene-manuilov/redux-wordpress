@@ -97,6 +97,35 @@ export default function createActions(name, host, endpoints, namespace = 'wp/v2'
 			fetchAll(`${normalizedHost}/${namespace}/${endpoint}`, params, onSuccess, onError);
 		};
 
+		actions[`fetchAll${endpointName}Endpoint`] = (endpoint2, params = {}) => (dispatch) => {
+			dispatch({
+				type: `@@wp/${name}/fetching-all/${endpoint}/${endpoint2}`,
+				params,
+			});
+
+			const onSuccess = (data, response) => {
+				dispatch({
+					type: `@@wp/${name}/fetched-all/${endpoint}/${endpoint2}`,
+					ok: true,
+					totalPages: parseInt(response.headers.get('X-WP-TotalPages'), 10),
+					total: parseInt(response.headers.get('X-WP-Total'), 10),
+					results: data,
+					params,
+				});
+			};
+
+			const onError = (error) => {
+				dispatch({
+					type: `@@wp/${name}/fetched-all/${endpoint}/${endpoint2}`,
+					ok: false,
+					message: error,
+					params,
+				});
+			};
+
+			fetchAll(`${normalizedHost}/${namespace}/${endpoint}/${endpoint2}`, params, onSuccess, onError);
+		};
+
 		actions[`fetch${endpointName}ById`] = (id, params = {}) => (dispatch) => {
 			dispatch({
 				type: `@@wp/${name}/fetching-by-id/${endpoint}`,

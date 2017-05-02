@@ -22,11 +22,13 @@ export default actions;
 //     fetchBooks(params) { ... },
 //     fetchBooksEndpoint(endpoint, params) { ... },
 //     fetchAllBooks(params) { ... },
+//     fetchAllBooksEndpoint(endpoint, params) { ... },
 //     fetchBooksById(id, params) { ... },
 //     fetchBooksEndpointById(id, endpoint, params) { ... },
 //     fetchAuthors(params) { ... },
 //     fetchAuthorsEndpoint(endpoint, params) { ... },
 //     fetchAllAuthors(params) { ... },
+//     fetchAllAuthorsEndpoint(endpoint, params) { ... },
 //     fetchAuthorsById(id, params) { ... },
 //     fetchAuthorsEndpointById(id, endpoint, params) { ... }
 // }
