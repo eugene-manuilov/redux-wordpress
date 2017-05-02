@@ -1,5 +1,7 @@
 # Redux WordPress
 
+[![npm version](https://badge.fury.io/js/redux-wordpress.svg)](https://badge.fury.io/js/redux-wordpress) [![Build Status](https://travis-ci.org/eugene-manuilov/redux-wordpress.svg?branch=master)](https://travis-ci.org/eugene-manuilov/redux-wordpress)
+
 This package is intended to help to build Redux actions and reducers for WordPress REST API endpoints. **This package is not ready yet**, so please, don't use it in your projects.
 
 ## The idea
@@ -55,7 +57,7 @@ Generated reducer will listen to action types dispatched from actions and update
 
 ## Contribute
 
-What to help or have a suggestion? Open a [new ticket](https://github.com/eugene-manuilov/redux-wordpress/issues/new) and we can discuss it or submit pull request. Please, make sure you run `npm run test` before submitting a pull request.
+What to help or have a suggestion? Open a [new ticket](https://github.com/eugene-manuilov/redux-wordpress/issues/new) and we can discuss it or submit pull request. Please, make sure you run `npm test` before submitting a pull request.
 
 ## LICENSE
 
