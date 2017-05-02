@@ -57,6 +57,27 @@ Generated reducer will listen to action types dispatched from actions and update
 }
 ```
 
+This package also contains another helper function which generates request functions to endpoints which you can use to group multiple requests into one action:
+
+```js
+// actionCreators.js
+
+import { createRequests } from 'redux-wordpress';
+
+const requests = createRequests('my-api', 'http://mysite.test/wp-json/', ['books', 'authors']);
+
+export function fetchInitialData() {
+    return dispatch => {
+        return Promise
+            .all([
+                requestBooks(...).then(response => response.json()).then(data => dispatch({action: 'books', data})),
+                requestAuthors(...).then(response => response.json()).then(data => dispatch({action: 'authors', data}))
+            ])
+            .then(() => dispatch({action: 'loaded-initial-data'}));
+    };
+}
+```
+
 ## Contribute
 
 What to help or have a suggestion? Open a [new ticket](https://github.com/eugene-manuilov/redux-wordpress/issues/new) and we can discuss it or submit pull request. Please, make sure you run `npm test` before submitting a pull request.
