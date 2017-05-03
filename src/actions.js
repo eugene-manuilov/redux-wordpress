@@ -80,6 +80,38 @@ export default function createActions(name, host, endpoints, namespace = 'wp/v2'
 			);
 		};
 
+		actions[`fetch${endpointName}ById`] = (id, params = {}) => (dispatch) => {
+			const type = `@@wp/${name}/fetched-by-id/${endpoint}`;
+
+			dispatch({
+				type: `@@wp/${name}/fetching-by-id/${endpoint}`,
+				id,
+				params,
+			});
+
+			fetchSingle(
+				`${normalizedHost}/${namespace}/${endpoint}/${id}?${qs(params)}`,
+				getSuccessHandlerById(dispatch, type, id, params),
+				getErrorHandlerById(dispatch, type, id, params),
+			);
+		};
+
+		actions[`fetch${endpointName}EndpointById`] = (id, endpoint2, params = {}) => (dispatch) => {
+			const type = `@@wp/${name}/fetched-by-id/${endpoint}/${endpoint2}`;
+
+			dispatch({
+				type: `@@wp/${name}/fetching-by-id/${endpoint}/${endpoint2}`,
+				id,
+				params,
+			});
+
+			fetchSingle(
+				`${normalizedHost}/${namespace}/${endpoint}/${id}/${endpoint2}?${qs(params)}`,
+				getSuccessHandlerById(dispatch, type, id, params),
+				getErrorHandlerById(dispatch, type, id, params),
+			);
+		};
+
 		actions[`fetchAll${endpointName}`] = (params = {}) => (dispatch) => {
 			const type = `@@wp/${name}/fetched-all/${endpoint}`;
 
@@ -112,33 +144,18 @@ export default function createActions(name, host, endpoints, namespace = 'wp/v2'
 			);
 		};
 
-		actions[`fetch${endpointName}ById`] = (id, params = {}) => (dispatch) => {
-			const type = `@@wp/${name}/fetched-by-id/${endpoint}`;
+		actions[`fetchAll${endpointName}EndpointById`] = (id, endpoint2, params = {}) => (dispatch) => {
+			const type = `@@wp/${name}/fetched-all-by-id/${endpoint}/${endpoint2}`;
 
 			dispatch({
-				type: `@@wp/${name}/fetching-by-id/${endpoint}`,
+				type: `@@wp/${name}/fetching-all-by-id/${endpoint}/${endpoint2}`,
 				id,
 				params,
 			});
 
-			fetchSingle(
-				`${normalizedHost}/${namespace}/${endpoint}/${id}?${qs(params)}`,
-				getSuccessHandlerById(dispatch, type, id, params),
-				getErrorHandlerById(dispatch, type, id, params),
-			);
-		};
-
-		actions[`fetch${endpointName}EndpointById`] = (id, endpoint2, params = {}) => (dispatch) => {
-			const type = `@@wp/${name}/fetched-by-id/${endpoint}/${endpoint2}`;
-
-			dispatch({
-				type: `@@wp/${name}/fetching-by-id/${endpoint}/${endpoint2}`,
-				id,
+			fetchAll(
+				`${normalizedHost}/${namespace}/${endpoint}/${id}/${endpoint2}`,
 				params,
-			});
-
-			fetchSingle(
-				`${normalizedHost}/${namespace}/${endpoint}/${id}/${endpoint2}?${qs(params)}`,
 				getSuccessHandlerById(dispatch, type, id, params),
 				getErrorHandlerById(dispatch, type, id, params),
 			);

@@ -29,7 +29,12 @@ export function fetchAll(url, params, onSuccess, onError) {
 						.then((items) => {
 							items.forEach(item => data.push(item));
 
-							if (pagenum >= response.headers.get('X-WP-TotalPages')) {
+							let totalpages = parseInt(response.headers.get('X-WP-TotalPages'), 10);
+							if (!totalpages || isNaN(totalpages)) {
+								totalpages = 0;
+							}
+
+							if (pagenum >= totalpages) {
 								resolve(data, response);
 							} else {
 								fetchPage(pagenum + 1, data, resolve, reject);
