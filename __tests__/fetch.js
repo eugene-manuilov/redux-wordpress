@@ -1,143 +1,101 @@
-jest.mock('isomorphic-fetch');
-
 import faker from 'faker';
-import { createActions } from '../lib/index';
 
-test('Test fetch function on success', () => {
-	const name = 'test-rest-api';
-	const endpoint = 'books';
-	const items = [];
-	const params = {context: 'view'};
+describe('fetchBooks action creators', () => {
+	beforeEach(() => {
+		fetch.resetMocks();
+	});
 
-	for (let i = 0, len = faker.random.number({min: 1, max: 20}); i < len; i++) {
-		items.push({
-			"id": faker.random.number(),
-			"date": "2017-04-13T20:02:35",
-			"date_gmt": "2017-04-13T20:02:35",
-			"guid": {"rendered": faker.internet.url()},
-			"modified": "2017-04-13T20:02:35",
-			"modified_gmt": "2017-04-13T20:02:35",
-			"slug": faker.lorem.slug(),
-			"status": "publish",
-			"type": "post",
-			"link": `http://wordpress.test/${faker.lorem.slug()}/`,
-			"title": {"rendered": faker.lorem.sentence()},
-			"content": {"rendered": faker.lorem.paragraphs(4)},
-			"excerpt": {"rendered": faker.lorem.paragraph()},
-			"author": faker.random.number(),
-			"featured_media": faker.random.number(),
-			"comment_status": "open",
-			"ping_status": "open",
-			"sticky": false,
-			"template": "",
-			"format": "standard",
-			"meta": [],
-			"categories": [faker.random.number()]
-		});
-	}
+	it('dispatches the correct action on successful fetch request', () => {
+		const store = mockStore({});
+		const items = [];
 
-	const mockData = {
-		status: 200,
-		data: items,
-		total: items.length,
-		totalPages: 1
-	};
-
-	require('isomorphic-fetch').__setMockData(mockData);
-
-	let called = 0;
-	const dispatch = action => {
-		if (called++) {
-			expect(require('isomorphic-fetch').__getRequestedUrl(mockData)).toBe(`http://wordpress.test/wp-json/wp/v2/${endpoint}?context=view`);
-
-			expect(action.type).toBe(`@@wp/${name}/fetched/${endpoint}`);
-			expect(action.total).toBe(items.length);
-			expect(action.totalPages).toBe(1);
-			expect(action.ok).toBeTruthy();
-
-			expect(Array.isArray(action.results)).toBeTruthy();
-			items.forEach((item, i) => {
-				expect(action.results[i]).toEqual(item);
+		for (let i = 0, len = faker.random.number({ min: 1, max: 20 }); i < len; i++) {
+			items.push({
+				"id": faker.random.number(),
+				"date": "2017-04-13T20:02:35",
+				"date_gmt": "2017-04-13T20:02:35",
+				"guid": {"rendered": faker.internet.url()},
+				"modified": "2017-04-13T20:02:35",
+				"modified_gmt": "2017-04-13T20:02:35",
+				"slug": faker.lorem.slug(),
+				"status": "publish",
+				"type": "post",
+				"link": `http://wordpress.test/${faker.lorem.slug()}/`,
+				"title": { "rendered": faker.lorem.sentence() },
+				"content": { "rendered": faker.lorem.paragraphs(4) },
+				"excerpt": { "rendered": faker.lorem.paragraph() },
+				"author": faker.random.number(),
+				"featured_media": faker.random.number(),
+				"comment_status": "open",
+				"ping_status": "open",
+				"sticky": false,
+				"template": "",
+				"format": "standard",
+				"meta": [],
+				"categories": [faker.random.number()]
 			});
-		} else {
-			expect(action.type).toBe(`@@wp/${name}/fetching/${endpoint}`);
 		}
 
-		expect(action.params).toEqual(params);
-	};
+		const mock = fetch.mockResponse(JSON.stringify(items), {
+			status: 200,
+			headers: new Headers({
+				'X-WP-TotalPages': 1,
+				'X-WP-Total': items.length
+			}),
+		});
 
-	const actions = createActions(name, 'http://wordpress.test/wp-json/', [endpoint]);
-	actions.fetchBooks(params)(dispatch);
-});
+		return store
+			.dispatch(actions.fetchBooks(params))
+			.then(() => {
+				const actions = store.getActions();
 
-test('Test fetch function on 404 response', () => {
-	const name = 'test-rest-api';
-	const endpoint = 'books';
-	const items = [];
-	const params = {context: 'view'};
-	const statusText = 'not-found';
-	const mockData = {
-		status: 404,
-		statusText: statusText,
-		data: items,
-		total: items.length,
-		totalPages: 1
-	};
+				expect(actions.length).toBe(2);
+				expect(mock).toHaveBeenCalledWith(`http://wordpress.test/wp-json/wp/v2/${endpoint}?context=view`);
 
-	require('isomorphic-fetch').__setMockData(mockData);
+				expect(actions[0]).toEqual({
+					type: `@@wp/${name}/fetching/${endpoint}`,
+					params
+				});
 
-	let called = 0;
-	const dispatch = action => {
-		if (called++) {
-			expect(require('isomorphic-fetch').__getRequestedUrl(mockData)).toBe(`http://wordpress.test/wp-json/wp/v2/${endpoint}?context=view`);
+				expect(actions[1]).toEqual({
+					type: `@@wp/${name}/fetched/${endpoint}`,
+					ok: true,
+					total: items.length,
+					totalPages: 1,
+					results: items,
+					params
+				});
+			});
+	});
 
-			expect(action.type).toBe(`@@wp/${name}/fetched/${endpoint}`);
-			expect(action.total).toBeUndefined();
-			expect(action.totalPages).toBeUndefined();
-			expect(action.results).toBeUndefined();
-			expect(action.ok).toBeFalsy();
-			expect(action.message).toBe(statusText);
-		} else {
-			expect(action.type).toBe(`@@wp/${name}/fetching/${endpoint}`);
-		}
+	it('dispatches the correct action on 404 response', () => {
+		const store = mockStore({});
+		const statusText = 'not-found';
 
-		expect(action.params).toEqual(params);
-	};
+		const mock = fetch.mockResponse('', {
+			status: 404,
+			statusText: statusText,
+		});
 
-	const actions = createActions(name, 'http://wordpress.test/wp-json/', [endpoint]);
-	actions.fetchBooks(params)(dispatch);
-});
+		return store
+			.dispatch(actions.fetchBooks(params))
+			.then(() => {
+				const actions = store.getActions();
 
-test('Test fetch function on reject response', () => {
-	const name = 'test-rest-api';
-	const endpoint = 'books';
-	const params = {context: 'view'};
-	const statusText = '404 not found';
-	const mockData = {
-		reject: true,
-		statusText: statusText
-	};
+				expect(actions.length).toBe(2);
+				expect(mock).toHaveBeenCalledWith(`http://wordpress.test/wp-json/wp/v2/${endpoint}?context=view`);
 
-	require('isomorphic-fetch').__setMockData(mockData);
+				expect(actions[0]).toEqual({
+					type: `@@wp/${name}/fetching/${endpoint}`,
+					params
+				});
 
-	let called = 0;
-	const dispatch = action => {
-		if (called++) {
-			expect(require('isomorphic-fetch').__getRequestedUrl(mockData)).toBe(`http://wordpress.test/wp-json/wp/v2/${endpoint}?context=view`);
-
-			expect(action.type).toBe(`@@wp/${name}/fetched/${endpoint}`);
-			expect(action.total).toBeUndefined();
-			expect(action.totalPages).toBeUndefined();
-			expect(action.results).toBeUndefined();
-			expect(action.ok).toBeFalsy();
-			expect(action.message).toBe(statusText);
-		} else {
-			expect(action.type).toBe(`@@wp/${name}/fetching/${endpoint}`);
-		}
-
-		expect(action.params).toEqual(params);
-	};
-
-	const actions = createActions(name, 'http://wordpress.test/wp-json/', [endpoint]);
-	actions.fetchBooks(params)(dispatch);
+				expect(actions[1]).toEqual({
+					type: `@@wp/${name}/fetched/${endpoint}`,
+					ok: false,
+					message: statusText,
+					params,
+				});
+			});
+	});
 });

@@ -1,8 +1,7 @@
-import fetch from 'isomorphic-fetch';
-
 export function qs(params) {
 	return Object
 		.keys(params)
+		.sort()
 		.map(key => `${encodeURIComponent(key)}=${encodeURIComponent(params[key])}`)
 		.join('&');
 }
@@ -11,7 +10,10 @@ export function fetchSingle(url, success, error) {
 	return fetch(url)
 		.then((response) => {
 			if (response.ok) {
-				response.json().then(data => success(data, response)).catch(error);
+				response
+					.json()
+					.then(data => success({ json: data, response }))
+					.catch(error);
 			} else {
 				error(response.statusText);
 			}
@@ -30,12 +32,12 @@ export function fetchAll(url, params, onSuccess, onError) {
 							items.forEach(item => data.push(item));
 
 							let totalpages = parseInt(response.headers.get('X-WP-TotalPages'), 10);
-							if (!totalpages || isNaN(totalpages)) {
+							if (isNaN(totalpages)) {
 								totalpages = 0;
 							}
 
 							if (pagenum >= totalpages) {
-								resolve(data, response);
+								resolve({ json: data, response });
 							} else {
 								fetchPage(pagenum + 1, data, resolve, reject);
 							}
@@ -48,14 +50,9 @@ export function fetchAll(url, params, onSuccess, onError) {
 			.catch(error => reject(error));
 	};
 
-	const fetchPromise = new Promise((resolve, reject) => {
-		fetchPage(1, [], resolve, reject);
-	});
-
-	fetchPromise.then(onSuccess);
-	fetchPromise.catch(onError);
-
-	return fetchPromise;
+	return (new Promise((resolve, reject) => fetchPage(params.page || 1, [], resolve, reject)))
+		.then(onSuccess)
+		.catch(onError);
 }
 
 export default {
