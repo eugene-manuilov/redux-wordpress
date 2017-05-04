@@ -11,25 +11,27 @@ const getSuccessAction = (json, response, type, params) => {
 		params,
 	};
 
-	const totalPages = parseInt(response.headers.get('X-WP-TotalPages'), 10);
-	if (!isNaN(totalPages)) {
-		action.totalPages = totalPages;
-	}
+	if (response) {
+		const totalPages = parseInt(response.headers.get('X-WP-TotalPages'), 10);
+		if (!isNaN(totalPages)) {
+			action.totalPages = totalPages;
+		}
 
-	const total = parseInt(response.headers.get('X-WP-Total'), 10);
-	if (!isNaN(total)) {
-		action.total = total;
+		const total = parseInt(response.headers.get('X-WP-Total'), 10);
+		if (!isNaN(total)) {
+			action.total = total;
+		}
 	}
 
 	return action;
 };
 
-const getSuccessHandler = (dispatch, type, params) => (json, response) => {
-	dispatch(getSuccessAction(json, response, type, params));
+const getSuccessHandler = (dispatch, type, params) => (data) => {
+	dispatch(getSuccessAction(data.json, data.response, type, params));
 };
 
-const getSuccessHandlerById = (dispatch, type, id, params) => (json, response) => {
-	const action = getSuccessAction(json, response, type, params);
+const getSuccessHandlerById = (dispatch, type, id, params) => (data) => {
+	const action = getSuccessAction(data.json, data.response, type, params);
 	action.id = id;
 	dispatch(action);
 };

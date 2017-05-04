@@ -8,13 +8,14 @@ describe('fetchAllBooks action creators', () => {
 	it('dispatches the correct action on successful fetch request', () => {
 		const store = mockStore({});
 		const items = [];
-		const per_page = faker.random.number({ min: 1, max: 2 });
+		const per_page = faker.random.number({ min: 1, max: 10 });
 		const params = { context: 'view', per_page };
 		const pages = [];
 		const mocks = [];
 
-		for (let i = 0, len = faker.random.number({ min: 1, max: 2 }); i < len; i++) {
+		for (let i = 0, len = faker.random.number({ min: 2, max: 10 }); i < len; i++) {
 			const page = [];
+
 			for (let j = 0; j < per_page; j++) {
 				const item = {
 					"id": faker.random.number(),
@@ -49,7 +50,7 @@ describe('fetchAllBooks action creators', () => {
 		}
 
 		pages.forEach((page) => {
-			const mock = fetch.mockResponse(JSON.stringify(page), {
+			const mock = fetch.mockResponseOnce(JSON.stringify(page), {
 				status: 200,
 				headers: new Headers({
 					'X-WP-TotalPages': pages.length,
@@ -80,7 +81,7 @@ describe('fetchAllBooks action creators', () => {
 					type: `@@wp/${name}/fetched-all/${endpoint}`,
 					ok: true,
 					total: items.length,
-					totalPages: 1,
+					totalPages: pages.length,
 					results: items,
 					params
 				});
