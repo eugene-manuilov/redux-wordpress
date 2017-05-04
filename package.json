@@ -48,6 +48,7 @@
 		"eslint-plugin-jsx-a11y": "^4.0.0",
 		"faker": "^4.1.0",
 		"jest": "^19.0.2",
+		"urijs": "^1.18.10",
 		"webpack": "^2.4.1"
 	},
 	"dependencies": {

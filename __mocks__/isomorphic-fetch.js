@@ -1,3 +1,5 @@
+import URI from 'urijs';
+
 jest.genMockFromModule('isomorphic-fetch');
 
 let mockData = {};
@@ -7,17 +9,22 @@ const fetch = (url) => {
 	requestedUrls[JSON.stringify(mockData)] = url;
 
 	return new Promise((resolve, reject) => {
+		const qv = URI(url).search(true);
 		const params = Object.assign({}, mockData);
-
-		// reset mock data
-		mockData = {};
 
 		if (params.reject) {
 			// reject with status text
 			reject(params.statusText || '');
 		} else {
+			let data = params.data || null;
+
+			// get page data if pagination is used
+			if (qv.page && qv.page > 0 && params.data[qv.page] && Array.isArray(params.data[qv.page])) {
+				data = params.data[qv.page];
+			}
+
 			// create a new response object with mock data
-			const response = new Response(JSON.stringify(params.data || null), {
+			const response = new Response(JSON.stringify(data), {
 				status: params.status || 200,
 				statusText: params.statusText || '',
 				headers: new Headers({
