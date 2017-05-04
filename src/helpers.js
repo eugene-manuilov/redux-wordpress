@@ -1,5 +1,3 @@
-import fetch from 'isomorphic-fetch';
-
 export function qs(params) {
 	return Object
 		.keys(params)

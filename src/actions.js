@@ -3,25 +3,35 @@ import upperFirst from 'lodash/upperFirst';
 
 import { qs, fetchSingle, fetchAll } from './helpers';
 
-const getSuccessHandler = (dispatch, type, params) => (json, response) => {
-	dispatch({
+const getSuccessAction = (json, response, type, params) => {
+	const action = {
 		type,
 		ok: true,
-		totalPages: parseInt(response.headers.get('X-WP-TotalPages'), 10),
-		total: parseInt(response.headers.get('X-WP-Total'), 10),
 		results: json,
 		params,
-	});
+	};
+
+	const totalPages = parseInt(response.headers.get('X-WP-TotalPages'), 10);
+	if (!isNaN(totalPages)) {
+		action.totalPages = totalPages;
+	}
+
+	const total = parseInt(response.headers.get('X-WP-Total'), 10);
+	if (!isNaN(total)) {
+		action.total = total;
+	}
+
+	return action;
 };
 
-const getSuccessHandlerById = (dispatch, type, id, params) => (json) => {
-	dispatch({
-		type,
-		ok: true,
-		result: json,
-		id,
-		params,
-	});
+const getSuccessHandler = (dispatch, type, params) => (json, response) => {
+	dispatch(getSuccessAction(json, response, type, params));
+};
+
+const getSuccessHandlerById = (dispatch, type, id, params) => (json, response) => {
+	const action = getSuccessAction(json, response, type, params);
+	action.id = id;
+	dispatch(action);
 };
 
 const getErrorHandler = (dispatch, type, params) => (error) => {
@@ -58,7 +68,7 @@ export default function createActions(name, host, endpoints, namespace = 'wp/v2'
 				params,
 			});
 
-			fetchSingle(
+			return fetchSingle(
 				`${normalizedHost}/${namespace}/${endpoint}?${qs(params)}`,
 				getSuccessHandler(dispatch, type, params),
 				getErrorHandler(dispatch, type, params),
@@ -73,7 +83,7 @@ export default function createActions(name, host, endpoints, namespace = 'wp/v2'
 				params,
 			});
 
-			fetchSingle(
+			return fetchSingle(
 				`${normalizedHost}/${namespace}/${endpoint}/${endpoint2}?${qs(params)}`,
 				getSuccessHandler(dispatch, type, params),
 				getErrorHandler(dispatch, type, params),
@@ -89,7 +99,7 @@ export default function createActions(name, host, endpoints, namespace = 'wp/v2'
 				params,
 			});
 
-			fetchSingle(
+			return fetchSingle(
 				`${normalizedHost}/${namespace}/${endpoint}/${id}?${qs(params)}`,
 				getSuccessHandlerById(dispatch, type, id, params),
 				getErrorHandlerById(dispatch, type, id, params),
@@ -105,7 +115,7 @@ export default function createActions(name, host, endpoints, namespace = 'wp/v2'
 				params,
 			});
 
-			fetchSingle(
+			return fetchSingle(
 				`${normalizedHost}/${namespace}/${endpoint}/${id}/${endpoint2}?${qs(params)}`,
 				getSuccessHandlerById(dispatch, type, id, params),
 				getErrorHandlerById(dispatch, type, id, params),
@@ -120,7 +130,7 @@ export default function createActions(name, host, endpoints, namespace = 'wp/v2'
 				params,
 			});
 
-			fetchAll(
+			return fetchAll(
 				`${normalizedHost}/${namespace}/${endpoint}`,
 				params,
 				getSuccessHandler(dispatch, type, params),
@@ -136,7 +146,7 @@ export default function createActions(name, host, endpoints, namespace = 'wp/v2'
 				params,
 			});
 
-			fetchAll(
+			return fetchAll(
 				`${normalizedHost}/${namespace}/${endpoint}/${endpoint2}`,
 				params,
 				getSuccessHandler(dispatch, type, params),
@@ -153,7 +163,7 @@ export default function createActions(name, host, endpoints, namespace = 'wp/v2'
 				params,
 			});
 
-			fetchAll(
+			return fetchAll(
 				`${normalizedHost}/${namespace}/${endpoint}/${id}/${endpoint2}`,
 				params,
 				getSuccessHandlerById(dispatch, type, id, params),

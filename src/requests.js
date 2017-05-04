@@ -1,5 +1,3 @@
-import fetch from 'isomorphic-fetch';
-
 import trimEnd from 'lodash/trimEnd';
 import upperFirst from 'lodash/upperFirst';
 

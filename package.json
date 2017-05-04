@@ -48,15 +48,23 @@
 		"eslint-plugin-jsx-a11y": "^4.0.0",
 		"faker": "^4.1.0",
 		"jest": "^19.0.2",
-		"urijs": "^1.18.10",
+		"jest-fetch-mock": "^1.1.1",
+		"redux": "^3.6.0",
+		"redux-mock-store": "^1.2.3",
+		"redux-thunk": "^2.2.0",
 		"webpack": "^2.4.1"
 	},
 	"dependencies": {
-		"isomorphic-fetch": "^2.2.1",
 		"lodash": "^4.17.4"
 	},
 	"peerDependencies": {
 		"redux": "^2.0.0 || ^3.0.0",
 		"redux-thunk": "^2.0.0"
+	},
+	"jest": {
+		"automock": false,
+		"setupFiles": [
+			"./jestrc.js"
+		]
 	}
 }

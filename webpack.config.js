@@ -14,6 +14,11 @@ config.output = {
 	libraryTarget: 'umd'
 };
 
+// externals
+config.externals = {
+	fetch: 'fetch'
+};
+
 // define module and plugins
 config.module = {rules: []};
 config.plugins = [];
