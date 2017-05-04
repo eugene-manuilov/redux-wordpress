@@ -1,16 +1,4 @@
-import configureStore from 'redux-mock-store';
-import thunk from 'redux-thunk';
 import faker from 'faker';
-
-import { createActions } from '../lib/index';
-
-const mockStore = configureStore([thunk]);
-
-const name = 'test-rest-api';
-const endpoint = 'books';
-const endpoint2 = 'chapters';
-const params = { context: 'view' };
-const actions = createActions(name, 'http://wordpress.test/wp-json/', [endpoint]);
 
 describe('fetchBooksEndpointById action creators', () => {
 	beforeEach(() => {
