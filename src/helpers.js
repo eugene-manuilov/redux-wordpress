@@ -3,6 +3,7 @@ import fetch from 'isomorphic-fetch';
 export function qs(params) {
 	return Object
 		.keys(params)
+		.sort()
 		.map(key => `${encodeURIComponent(key)}=${encodeURIComponent(params[key])}`)
 		.join('&');
 }
@@ -48,14 +49,9 @@ export function fetchAll(url, params, onSuccess, onError) {
 			.catch(error => reject(error));
 	};
 
-	const fetchPromise = new Promise((resolve, reject) => {
-		fetchPage(1, [], resolve, reject);
-	});
-
-	fetchPromise.then(onSuccess);
-	fetchPromise.catch(onError);
-
-	return fetchPromise;
+	return (new Promise((resolve, reject) => fetchPage(params.page || 1, [], resolve, reject)))
+		.then(onSuccess)
+		.catch(onError);
 }
 
 export default {
