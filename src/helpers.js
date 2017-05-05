@@ -1,8 +1,28 @@
-export function qs(params) {
+export function qs(params, parent = false) {
 	return Object
 		.keys(params)
 		.sort()
-		.map(key => `${encodeURIComponent(key)}=${encodeURIComponent(params[key])}`)
+		.map((key) => {
+			const encode = encodeURIComponent;
+
+			if (Array.isArray(params[key])) {
+				return params[key]
+					.map((value, i) => {
+						if (!parent) {
+							return `${encode(key)}[${encode(i)}]=${encode(value)}`;
+						}
+
+						return `${encode(parent)}[${encode(key)}][${encode(i)}]=${encode(value)}`;
+					})
+					.join('&');
+			} else if (typeof params[key] === 'object') {
+				return qs(params[key], key);
+			}
+
+			return !parent
+				? `${encode(key)}=${encode(params[key])}`
+				: `${encode(parent)}[${encode(key)}]=${encode(params[key])}`;
+		})
 		.join('&');
 }
 
