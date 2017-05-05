@@ -7,7 +7,7 @@
 	"bugs": {
 		"url": "https://github.com/eugene-manuilov/redux-wordpress/issues"
 	},
-	"version": "0.1.0-dev.5",
+	"version": "0.1.0-dev.6",
 	"main": "lib/index",
 	"files": [
 		"*.md",
