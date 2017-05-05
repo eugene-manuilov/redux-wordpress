@@ -1,7 +1,4 @@
-import trimEnd from 'lodash/trimEnd';
-import upperFirst from 'lodash/upperFirst';
-
-import { qs } from './helpers';
+import { qs, upperFirst, trimEnd } from './helpers';
 
 const fetchRequest = (url) => {
 	const requestPromise = new Promise((resolve, reject) => {

@@ -1,7 +1,4 @@
-import trimEnd from 'lodash/trimEnd';
-import upperFirst from 'lodash/upperFirst';
-
-import { qs, fetchSingle, fetchAll } from './helpers';
+import { qs, upperFirst, trimEnd, fetchSingle, fetchAll } from './helpers';
 
 const getSuccessAction = (json, response, type, params) => {
 	const action = {

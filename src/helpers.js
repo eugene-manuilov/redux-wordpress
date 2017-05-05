@@ -6,6 +6,20 @@ export function qs(params) {
 		.join('&');
 }
 
+export function upperFirst(name) {
+	return name
+		.split(/( |-)/)
+		.filter(item => item !== ' ' && item !== '-')
+		.map(item => item.toLowerCase())
+		.map(item => item[0].toUpperCase + item.slice(1))
+		.join('');
+}
+export function trimEnd(message, char) {
+	return message[message.length - 1] === char
+		? trimEnd(message.slice(0, -1))
+		: message;
+}
+
 export function fetchSingle(url, success, error) {
 	return fetch(url)
 		.then((response) => {
