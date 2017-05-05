@@ -8,10 +8,10 @@ export function qs(params) {
 
 export function upperFirst(name) {
 	return name
-		.split(/( |-)/)
-		.filter(item => item !== ' ' && item !== '-')
+		.split(/( |-|_)/)
+		.filter(item => item !== ' ' && item !== '-' && item !== '_')
 		.map(item => item.toLowerCase())
-		.map(item => item[0].toUpperCase + item.slice(1))
+		.map(item => item[0].toUpperCase() + item.slice(1))
 		.join('');
 }
 export function trimEnd(message, char) {
