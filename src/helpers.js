@@ -16,7 +16,7 @@ export function upperFirst(name) {
 }
 export function trimEnd(message, char) {
 	return message[message.length - 1] === char
-		? trimEnd(message.slice(0, -1))
+		? trimEnd(message.slice(0, -1), char)
 		: message;
 }
 
