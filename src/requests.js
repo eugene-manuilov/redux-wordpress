@@ -1,26 +1,20 @@
-import { qs, upperFirst, trimEnd } from './helpers';
-
-const fetchRequest = (url) => {
-	const requestPromise = new Promise((resolve, reject) => {
-		fetch(url)
-			.then((response) => {
-				response
-					.json()
-					.then(json => resolve(json, response))
-					.catch(error => reject(error));
-			})
-			.catch(error => reject(error));
-	});
-
-	return requestPromise;
-};
+import { qs, upperFirst, trimEnd, requestAll, requestSingle } from './helpers';
 
 export default function createRequests(host, endpoints, namespace = 'wp/v2') {
 	const requests = {};
 
 	endpoints.forEach((endpoint) => {
-		requests[`request${upperFirst(endpoint)}`] = params => fetchRequest(`${trimEnd(host, '/')}/${namespace}/${endpoint}?${qs(params)}`);
-		requests[`request${upperFirst(endpoint)}ById`] = (id, params) => fetchRequest(`${trimEnd(host, '/')}/${namespace}/${endpoint}/${id}?${qs(params)}`);
+		const normalizedURL = trimEnd(host, '/');
+		const endpointName = upperFirst(endpoint);
+
+		requests[`request${endpointName}`] = params => requestSingle(`${normalizedURL}/${namespace}/${endpoint}?${qs(params)}`);
+		requests[`request${endpointName}Endpoint`] = (endpoint2, params) => requestSingle(`${normalizedURL}/${namespace}/${endpoint}/${endpoint2}?${qs(params)}`);
+		requests[`request${endpointName}ById`] = (id, params) => requestSingle(`${normalizedURL}/${namespace}/${endpoint}/${id}?${qs(params)}`);
+		requests[`request${endpointName}EndpointById`] = (id, endpoint2, params) => requestSingle(`${normalizedURL}/${namespace}/${endpoint}/${id}/${endpoint}?${qs(params)}`);
+
+		requests[`requestAll${endpointName}`] = params => requestAll(`${normalizedURL}/${namespace}/${endpoint}`, params);
+		requests[`requestAll${endpointName}Endpoint`] = (endpoint2, params) => requestAll(`${normalizedURL}/${namespace}/${endpoint}/${endpoint2}`, params);
+		requests[`requestAll${endpointName}EndpointById`] = (id, endpoint2, params) => requestAll(`${normalizedURL}/${namespace}/${endpoint}/${id}/${endpoint}`, params);
 	});
 
 	return requests;

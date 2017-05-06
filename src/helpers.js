@@ -40,22 +40,30 @@ export function trimEnd(message, char) {
 		: message;
 }
 
-export function fetchSingle(url, success, error) {
-	return fetch(url)
-		.then((response) => {
-			if (response.ok) {
-				response
-					.json()
-					.then(data => success({ json: data, response }))
-					.catch(error);
-			} else {
-				error(response.statusText);
-			}
-		})
-		.catch(error);
+export function requestSingle(url) {
+	const requestPromise = new Promise((resolve, reject) => {
+		fetch(url)
+			.then((response) => {
+				if (response.ok) {
+					response
+						.json()
+						.then(json => resolve({ json, response }))
+						.catch(error => reject(error));
+				} else {
+					reject(response.statusText);
+				}
+			})
+			.catch(reject);
+	});
+
+	return requestPromise;
 }
 
-export function fetchAll(url, params, onSuccess, onError) {
+export function fetchSingle(url, success, error) {
+	return requestSingle(url).then(success).catch(error);
+}
+
+export function requestAll(url, params) {
 	const fetchPage = (pagenum, data, resolve, reject) => {
 		fetch(`${url}?${qs(Object.assign({ per_page: 100 }, params, { page: pagenum }))}`)
 			.then((response) => {
@@ -84,9 +92,11 @@ export function fetchAll(url, params, onSuccess, onError) {
 			.catch(error => reject(error));
 	};
 
-	return (new Promise((resolve, reject) => fetchPage(params.page || 1, [], resolve, reject)))
-		.then(onSuccess)
-		.catch(onError);
+	return new Promise((resolve, reject) => fetchPage(params.page || 1, [], resolve, reject));
+}
+
+export function fetchAll(url, params, onSuccess, onError) {
+	return requestAll(url, params).then(onSuccess).catch(onError);
 }
 
 export default {
