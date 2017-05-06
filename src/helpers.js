@@ -63,7 +63,7 @@ export function fetchSingle(url, success, error) {
 	return requestSingle(url).then(success).catch(error);
 }
 
-export function requestAll(url, params) {
+export function requestAll(url, params = {}) {
 	const fetchPage = (pagenum, data, resolve, reject) => {
 		fetch(`${url}?${qs(Object.assign({ per_page: 100 }, params, { page: pagenum }))}`)
 			.then((response) => {
