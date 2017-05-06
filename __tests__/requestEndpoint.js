@@ -1,6 +1,6 @@
 import faker from 'faker';
 
-describe('requestBooksEndpoint action creators', () => {
+describe('requestBooksEndpoint function', () => {
 	beforeEach(() => {
 		fetch.resetMocks();
 	});
