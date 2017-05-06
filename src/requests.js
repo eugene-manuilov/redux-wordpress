@@ -7,14 +7,14 @@ export default function createRequests(host, endpoints, namespace = 'wp/v2') {
 		const normalizedURL = trimEnd(host, '/');
 		const endpointName = upperFirst(endpoint);
 
-		requests[`request${endpointName}`] = params => requestSingle(`${normalizedURL}/${namespace}/${endpoint}?${qs(params)}`);
-		requests[`request${endpointName}Endpoint`] = (endpoint2, params) => requestSingle(`${normalizedURL}/${namespace}/${endpoint}/${endpoint2}?${qs(params)}`);
-		requests[`request${endpointName}ById`] = (id, params) => requestSingle(`${normalizedURL}/${namespace}/${endpoint}/${id}?${qs(params)}`);
-		requests[`request${endpointName}EndpointById`] = (id, endpoint2, params) => requestSingle(`${normalizedURL}/${namespace}/${endpoint}/${id}/${endpoint}?${qs(params)}`);
+		requests[`request${endpointName}`] = (params = {}) => requestSingle(`${normalizedURL}/${namespace}/${endpoint}?${qs(params)}`);
+		requests[`request${endpointName}Endpoint`] = (endpoint2, params = {}) => requestSingle(`${normalizedURL}/${namespace}/${endpoint}/${endpoint2}?${qs(params)}`);
+		requests[`request${endpointName}ById`] = (id, params = {}) => requestSingle(`${normalizedURL}/${namespace}/${endpoint}/${id}?${qs(params)}`);
+		requests[`request${endpointName}EndpointById`] = (id, endpoint2, params = {}) => requestSingle(`${normalizedURL}/${namespace}/${endpoint}/${id}/${endpoint}?${qs(params)}`);
 
-		requests[`requestAll${endpointName}`] = params => requestAll(`${normalizedURL}/${namespace}/${endpoint}`, params);
-		requests[`requestAll${endpointName}Endpoint`] = (endpoint2, params) => requestAll(`${normalizedURL}/${namespace}/${endpoint}/${endpoint2}`, params);
-		requests[`requestAll${endpointName}EndpointById`] = (id, endpoint2, params) => requestAll(`${normalizedURL}/${namespace}/${endpoint}/${id}/${endpoint}`, params);
+		requests[`requestAll${endpointName}`] = (params = {}) => requestAll(`${normalizedURL}/${namespace}/${endpoint}`, params);
+		requests[`requestAll${endpointName}Endpoint`] = (endpoint2, params = {}) => requestAll(`${normalizedURL}/${namespace}/${endpoint}/${endpoint2}`, params);
+		requests[`requestAll${endpointName}EndpointById`] = (id, endpoint2, params = {}) => requestAll(`${normalizedURL}/${namespace}/${endpoint}/${id}/${endpoint}`, params);
 	});
 
 	return requests;
