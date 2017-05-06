@@ -1,6 +1,6 @@
 import faker from 'faker';
 
-describe('fetchBooks action creators', () => {
+describe('requestBooks action creators', () => {
 	beforeEach(() => {
 		fetch.resetMocks();
 	});
@@ -49,6 +49,19 @@ describe('fetchBooks action creators', () => {
 
 			expect(data.response).toBeDefined();
 
+			expect(mock).toHaveBeenCalledWith(`http://wordpress.test/wp-json/wp/v2/${endpoint}?context=view`);
+		});
+	});
+
+	it('rejects request on error', () => {
+		const statusText = 'not-found';
+		const mock = fetch.mockResponse('', {
+			status: 404,
+			statusText: statusText,
+		});
+
+		return requests.requestBooks(params).catch((error) => {
+			expect(error).toBe(statusText);
 			expect(mock).toHaveBeenCalledWith(`http://wordpress.test/wp-json/wp/v2/${endpoint}?context=view`);
 		});
 	});
