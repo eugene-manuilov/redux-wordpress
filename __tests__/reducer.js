@@ -57,7 +57,7 @@ test('Test state change on fetch success', () => {
 });
 
 test('Test state change on fetch-by-id success', () => {
-	const authors = {};
+	const authors = [];
 	authors[faker.random.number()] = faker.lorem.sentence();
 	authors[faker.random.number()] = faker.lorem.sentence();
 	authors[faker.random.number()] = faker.lorem.sentence();
@@ -76,8 +76,8 @@ test('Test state change on fetch-by-id success', () => {
 		result: data
 	};
 
-	const result = Object.assign({}, state, {books: {}});
-	result.books[id] = data;
+	const result = Object.assign({}, state, {books: { data: [] }});
+	result.books.data[id] = data;
 
 	expect(reducer(state, action)).toEqual(result);
 });
