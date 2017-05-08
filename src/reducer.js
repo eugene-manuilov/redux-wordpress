@@ -79,11 +79,39 @@ class FetchByIdReducer extends Reducer {
 	}
 }
 
+class FetchEndpointReducer extends Reducer {
+	match(type) {
+		return type.match(new RegExp(`^@@wp/${this.name}/fetched/(\\w+)/(\\w+)$`));
+	}
+}
+
+class FetchEndpointByIdReducer extends Reducer {
+	match(type) {
+		return type.match(new RegExp(`^@@wp/${this.name}/fetched-by-id/(\\w+)/(\\w+)$`));
+	}
+}
+
+class FetchAllEndpointReducer extends Reducer {
+	match(type) {
+		return type.match(new RegExp(`^@@wp/${this.name}/fetched-all/(\\w+)/(\\w+)$`));
+	}
+}
+
+class FetchAllEndpointByIdReducer extends Reducer {
+	match(type) {
+		return type.match(new RegExp(`^@@wp/${this.name}/fetched-all-by-id/(\\w+)/(\\w+)$`));
+	}
+}
+
 export default function createReducer(name) {
 	const reducers = [
 		new FetchReducer(name),
 		new FetchAllReducer(name),
 		new FetchByIdReducer(name),
+		new FetchEndpointReducer(name),
+		new FetchEndpointByIdReducer(name),
+		new FetchAllEndpointReducer(name),
+		new FetchAllEndpointByIdReducer(name),
 	];
 
 	return (state = {}, action = {}) => {
