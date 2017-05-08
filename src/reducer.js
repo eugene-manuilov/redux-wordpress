@@ -26,6 +26,24 @@ class Reducer {
 
 		return data;
 	}
+
+	prepareNewState(action) {
+		const state = {};
+
+		if (action.results) {
+			state.data = this.normalizeData(action.results);
+		}
+
+		if (typeof action.total !== 'undefined') {
+			state.total = action.total;
+		}
+
+		if (typeof action.totalPages !== 'undefined') {
+			state.totalPages = action.totalPages;
+		}
+
+		return state;
+	}
 }
 
 class FetchReducer extends Reducer {
@@ -35,23 +53,10 @@ class FetchReducer extends Reducer {
 
 	map(state, action) {
 		const obj = {};
-		const data = {};
 		const self = this;
 		const match = self.match(action.type);
 
-		if (action.results) {
-			data.data = self.normalizeData(action.results);
-		}
-
-		if (typeof action.total !== 'undefined') {
-			data.total = action.total;
-		}
-
-		if (typeof action.totalPages !== 'undefined') {
-			data.totalPages = action.totalPages;
-		}
-
-		obj[match[1]] = Object.assign({}, state[match[1]] || {}, data);
+		obj[match[1]] = Object.assign({}, state[match[1]] || {}, self.prepareNewState(action));
 
 		return Object.assign({}, state, obj);
 	}
@@ -83,21 +88,54 @@ class FetchEndpointReducer extends Reducer {
 	match(type) {
 		return type.match(new RegExp(`^@@wp/${this.name}/fetched/(\\w+)/(\\w+)$`));
 	}
+
+	map(state, action) {
+		const obj = {};
+		const self = this;
+		const match = self.match(action.type);
+
+		obj[match[1]] = Object.assign({}, state[match[1]] || {});
+		obj[match[1]][match[2]] = Object.assign(
+			{},
+			obj[match[1]][match[2]] || {},
+			self.prepareNewState(action),
+		);
+
+		return Object.assign({}, state, obj);
+	}
 }
 
 class FetchEndpointByIdReducer extends Reducer {
 	match(type) {
 		return type.match(new RegExp(`^@@wp/${this.name}/fetched-by-id/(\\w+)/(\\w+)$`));
 	}
+
+	map(state, action) {
+		const obj = {};
+		const self = this;
+		const match = self.match(action.type);
+
+		obj[match[1]] = Object.assign({}, state[match[1]] || {});
+		obj[match[1]].data = obj[match[1]].data || [];
+		obj[match[1]].data[action.id] = obj[match[1]].data[action.id] || {};
+
+		obj[match[1]].data[action.id][match[2]] = Object.assign(
+			{},
+			obj[match[1]].data[action.id][match[2]] || {},
+			self.prepareNewState(action),
+		);
+
+		return Object.assign({}, state, obj);
+	}
 }
 
-class FetchAllEndpointReducer extends Reducer {
+class FetchAllEndpointReducer extends FetchEndpointReducer {
 	match(type) {
 		return type.match(new RegExp(`^@@wp/${this.name}/fetched-all/(\\w+)/(\\w+)$`));
 	}
 }
 
-class FetchAllEndpointByIdReducer extends Reducer {
+class FetchAllEndpointByIdReducer extends FetchEndpointByIdReducer {
 	match(type) {
 		return type.match(new RegExp(`^@@wp/${this.name}/fetched-all-by-id/(\\w+)/(\\w+)$`));
 	}
