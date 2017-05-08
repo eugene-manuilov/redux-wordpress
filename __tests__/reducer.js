@@ -17,7 +17,12 @@ test('Test original state has not changed on unsuccessful result', () => {
 	const state = {test: faker.random.number(), data: [1, 2, 3]};
 
 	expect(reducer(state, {type: `@@wp/${name}/fetched/books`, ok: false})).toEqual(state);
+	expect(reducer(state, {type: `@@wp/${name}/fetched/books/chapters`, ok: false})).toEqual(state);
+	expect(reducer(state, {type: `@@wp/${name}/fetched-all/books`, ok: false})).toEqual(state);
+	expect(reducer(state, {type: `@@wp/${name}/fetched-all/books/chapters`, ok: false})).toEqual(state);
 	expect(reducer(state, {type: `@@wp/${name}/fetched-by-id/books`, ok: false})).toEqual(state);
+	expect(reducer(state, {type: `@@wp/${name}/fetched-by-id/books/chapters`, ok: false})).toEqual(state);
+	expect(reducer(state, {type: `@@wp/${name}/fetched-all-by-id/books/chapters`, ok: false})).toEqual(state);
 });
 
 test('Test state change on fetch success', () => {
