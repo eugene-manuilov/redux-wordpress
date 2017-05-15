@@ -11,27 +11,13 @@ class Reducer {
 		return state;
 	}
 
-	normalizeData(data) {
-		if (Array.isArray(data)) {
-			const items = [];
-			data.forEach((item) => {
-				const id = parseInt(item.id, 10);
-				if (isNaN(id)) {
-					items.push(item);
-				} else {
-					items[item.id] = item;
-				}
-			});
-		}
-
-		return data;
-	}
-
 	prepareNewState(action) {
 		const state = {};
 
 		if (action.results) {
-			state.data = this.normalizeData(action.results);
+			state.data = action.results;
+		} else if (action.result) {
+			state.data = action.result;
 		}
 
 		if (typeof action.total !== 'undefined') {
@@ -77,8 +63,7 @@ class FetchByIdReducer extends Reducer {
 		const obj = {};
 		const match = this.match(action.type);
 
-		obj[match[1]] = state[match[1]] || { data: [] };
-		obj[match[1]].data[action.id] = action.result;
+		obj[`${match[1]}/${action.id}`] = this.prepareNewState(action);
 
 		return Object.assign({}, state, obj);
 	}
@@ -94,12 +79,7 @@ class FetchEndpointReducer extends Reducer {
 		const self = this;
 		const match = self.match(action.type);
 
-		obj[match[1]] = Object.assign({}, state[match[1]] || {});
-		obj[match[1]][match[2]] = Object.assign(
-			{},
-			obj[match[1]][match[2]] || {},
-			self.prepareNewState(action),
-		);
+		obj[`${match[1]}/${match[2]}`] = self.prepareNewState(action);
 
 		return Object.assign({}, state, obj);
 	}
@@ -115,15 +95,7 @@ class FetchEndpointByIdReducer extends Reducer {
 		const self = this;
 		const match = self.match(action.type);
 
-		obj[match[1]] = Object.assign({}, state[match[1]] || {});
-		obj[match[1]].data = obj[match[1]].data || [];
-		obj[match[1]].data[action.id] = obj[match[1]].data[action.id] || {};
-
-		obj[match[1]].data[action.id][match[2]] = Object.assign(
-			{},
-			obj[match[1]].data[action.id][match[2]] || {},
-			self.prepareNewState(action),
-		);
+		obj[`${match[1]}/${action.id}/${match[2]}`] = self.prepareNewState(action);
 
 		return Object.assign({}, state, obj);
 	}
