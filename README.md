@@ -2,11 +2,34 @@
 
 [![npm version](https://badge.fury.io/js/redux-wordpress.svg)](https://badge.fury.io/js/redux-wordpress) [![Build Status](https://travis-ci.org/eugene-manuilov/redux-wordpress.svg?branch=master)](https://travis-ci.org/eugene-manuilov/redux-wordpress)
 
-This package is intended to help to build Redux actions and reducers for WordPress REST API endpoints. **This package is not ready yet**, so please, don't use it in your projects.
+This package is intended to help you to build Redux actions and reducers for WordPress REST API endpoints.
 
-## The idea
+## Installation
 
-The main idea behind this package is to create helper functions which will allow us to easily generate action functions and reducers for custom WordPress REST API endpoints. It could be something like this:
+NPM:
+
+```
+npm install redux-wordpress --save
+```
+
+Yarn:
+
+```
+yarn add redux-wordpress
+```
+
+## Usage
+
+The package exports three function which you can use to create actions and build a reducer.
+
+### createActions(name, host, endpoints, namespace)
+
+Returns an object with a set of function which you can use to fetch data from REST API.
+
+- **name** _(string)_ - Arbitrary name which will be used in action types to distinguish different actions.
+- **host** _(string)_ - URL address to your API's root. Usually it will look like: `http://mysite.com/wp-json/`.
+- **endpoints** _(array)_ - A list of endpoints which you want to build actions for. It could be something like `['posts', 'categories']`.
+- **namespace** _(string)_ - Optional. The namespace for your endpoints. By default it is `wp/v2`.
 
 ```js
 // actionCreators.js
@@ -36,6 +59,12 @@ export default actions;
 // }
 ```
 
+### createReducer(name)
+
+Returns a reducer function which you can use to catch data returned by a fetch action.
+
+- **name** _(string)_ - A name which will be used to catch proper actions. It should be the same name as you passed to `createActions` function.
+
 ```js
 // reducers.js
 
@@ -47,25 +76,13 @@ const rootReducer = combineReducers({
 
 export default rootReducer;
 ```
+### createRequests(host, endpoints, namespace)
 
-Generated reducer will listen to action types dispatched from actions and update state using endpoint names as holders for received data. It will look like this:
+Helper function which generates request functions to endpoints which you can use to group multiple requests into one action:
 
-```json
-{
-    "books": {
-        "total": 999,
-        "totalPages": 999,
-        "data": [{}, {}, {}]
-    },
-    "authors": {
-        "total": 999,
-        "totalPages": 999,
-        "data": [{}, {}, {}]
-    }
-}
-```
-
-This package also contains another helper function which generates request functions to endpoints which you can use to group multiple requests into one action:
+- **host** _(string)_ - URL address to your API's root. Usually it will look like: `http://mysite.com/wp-json/`.
+- **endpoints** _(array)_ - A list of endpoints which you want to build actions for. It could be something like `['posts', 'categories']`.
+- **namespace** _(string)_ - Optional. The namespace for your endpoints. By default it is `wp/v2`.
 
 ```js
 // actionCreators.js
