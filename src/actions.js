@@ -174,7 +174,7 @@ export default function createActions(name, host, endpoints, args = {}) {
 			};
 		}
 
-		if (options.fetchAllEnpointById !== false) {
+		if (options.fetchAllEndpointById !== false) {
 			actions[`fetchAll${endpointName}EndpointById`] = (id, endpoint2, params = {}) => (dispatch) => {
 				const type = `@@wp/${name}/fetched-all-by-id/${endpoint}/${endpoint2}`;
 
