@@ -6,17 +6,17 @@ This package is intended to help you to build Redux actions and reducers for Wor
 
 ## Installation
 
-NPM:
+You can add it to your project by running following NPM or Yarn command in your terminal:
 
 ```
 npm install redux-wordpress --save
 ```
 
-Yarn:
-
 ```
 yarn add redux-wordpress
 ```
+
+This package uses ES6 fetch and promises to make AJAX requests, so you might also need to install `isomorphic-fetch` and `es6-promise` packages to make sure it works correctly during server rendering or in older browsers.
 
 ## Usage
 
