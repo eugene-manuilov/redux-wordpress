@@ -105,14 +105,14 @@ Helper function which generates request functions to endpoints which you can use
 
 import { createRequests } from 'redux-wordpress';
 
-const requests = createRequests('my-api', 'http://mysite.test/wp-json/', ['books', 'authors']);
+const requests = createRequests('http://mysite.test/wp-json/', ['books', 'authors']);
 
 export function fetchInitialData() {
     return dispatch => {
         return Promise
             .all([
-                requestBooks(...).then((data, response) => dispatch({action: 'books', data})),
-                requestAuthors(...).then((data, response) => dispatch({action: 'authors', data}))
+                requests.requestBooks(...).then((data, response) => dispatch({action: 'books', data})),
+                requests.requestAuthors(...).then((data, response) => dispatch({action: 'authors', data}))
             ])
             .then(() => dispatch({action: 'loaded-initial-data'}));
     };
